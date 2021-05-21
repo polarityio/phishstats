@@ -1,0 +1,107 @@
+{{#each block.data.details as |details|}}
+    <div class="mb-1">
+        {{#if details}}
+            <h1 class="p-title">
+                {{fa-icon "info" fixedWidth=true}}  Site Information
+            </h1>
+        {{/if}}
+
+        {{#if details.ip}}
+            <div>
+                <span class="p-key">IP: </span>
+                 <span class="p-value">{{details.ip}}</span>
+            </div>
+        {{/if}}
+
+        {{#if details.isp}}
+            <div>
+                <span class="p-key">ISP: </span>
+                <span class="p-value">{{details.isp}}</span>
+            </div>
+        {{/if}}
+
+        {{#if details.countrycode}}
+            <div>
+                <span class="p-key">Countrycode: </span>
+                <span class="p-value">{{details.countrycode}}</span>
+            </div>
+        {{/if}}
+
+        {{#if details.host}}
+            <div>
+                <span class="p-key">Host: </span>
+                <span class="p-value">{{details.host}}</span>
+            </div>
+        {{/if}}
+
+        {{#if details.domain}}
+            <div>
+                <span class="p-key">Domain: </span>
+                <span class="p-value">{{details.domain}}</span>
+            </div>
+        {{/if}}
+
+        {{#if details.domain_registered_n_days_ago}}
+            <div>
+                <span class="p-key">Registration Date: </span>
+                <span class="p-value">{{details.domain_registered_n_days_ago}}</span>
+            </div>
+        {{/if}}
+
+        {{#if details.asn}}
+            <div>
+                <span class="p-key">ASN: </span>
+                <span class="p-value">{{details.asn}}</span>
+            </div>
+        {{/if}}
+    </div>
+{{/each}}
+
+{{!-- {
+  "id": 2,
+  "url": "http://00000-00.000webhostapp.com/",
+  "ip": "2a02:4780:dead:6c62::1",
+  "countrycode": "US",
+  "countryname": "United States",
+  "regioncode": "",
+  "regionname": "",
+  "city": "",
+  "zipcode": "",
+  "latitude": "38",
+  "longitude": "-97.82200000",
+  "asn": "AS47583",
+  "bgp": "2a02:4780:dead::/48",
+  "isp": "HOSTINGER-AS, LT",
+  "title": null,
+  "date": "2017-05-26T03:00:00.000Z",
+  "date_update": "2020-12-08T01:50:24.000Z",
+  "hash": "9b4aa54561d60ebbf98677565c30330621c40bd10dc74da9e387a85809ec5ecc",
+  "score": null,
+  "host": "00000-00.000webhostapp.com",
+  "domain": null,
+  "tld": "com",
+  "domain_registered_n_days_ago": null,
+  "screenshot": null,
+  "abuse_contact": null,
+  "ssl_issuer": null,
+  "ssl_subject": null,
+  "alexa_rank_host": null,
+  "alexa_rank_domain": null,
+  "n_times_seen_ip": null,
+  "n_times_seen_host": null,
+  "n_times_seen_domain": null,
+  "http_code": null,
+  "http_server": null,
+  "google_safebrowsing": null,
+  "virus_total": null,
+  "abuse_ch_malware": null,
+  "threat_crowd": null,
+  "threat_crowd_subdomain_count": null,
+  "threat_crowd_votes": null,
+  "vulns": null,
+  "ports": null,
+  "os": null,
+  "tags": null,
+  "technology": null,
+  "page_text": "   "
+} --}}
