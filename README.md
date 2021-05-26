@@ -1,11 +1,16 @@
 # Polarity PhishStats Integration
-###TODO###
+The `PhishStats` integration will return results from the most recent relevant scan performed by the `PhishStats` service.  After searching for the scan, additional scan details are returned by retrieving the overall verdict information to include whether the indicator is associated with any phishing activity. 
+
+To learn more about PhishStats, please visit: https://PhishStats.io/about/
+
 
 |*PhishStats.io example* |
+|---|
+<img width="400" alt="Integration Example" src="./assets/phishstats.png">
 
 ## Integration Overview
 
-The `PhishStats` integration will return results from the most recent relevant scan performed by the `PhishStats` service.  After searching for the scan, additional scan details are returned by retrieving the overall verdict information to include whether the indicator is malicious, the overall score, tags, categories, and brands.
+The Polarity PhishStats integration will lookup domains, sha256 hashes, IPv4 and IPv6 addresses in PhishStats and provide contextual information about the entity.
 
 ## Installation Instructions
 
