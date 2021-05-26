@@ -3,7 +3,8 @@
     {{#if details}}
       <h1 class='p-title'>
         {{fa-icon 'map-marker-alt' fixedWidth=true}}
-        IP - {{ details.ip }}
+        IP -
+        {{details.ip}}
       </h1>
     {{/if}}
 
@@ -13,13 +14,6 @@
         <span class='p-value'>{{details.url}}</span>
       </div>
     {{/if}}
-
-    {{!-- {{#if details.ip}}
-      <div>
-        <span class='p-key'>IP: </span>
-        <span class='p-value'>{{details.ip}}</span>
-      </div>
-    {{/if}} --}}
 
     {{#if details.bgp}}
       <div>
