@@ -1,3 +1,4 @@
+const async = require('async');
 const fs = require('fs');
 const gaxios = require('gaxios');
 const https = require('https');
@@ -24,7 +25,6 @@ const startup = (logger) => {
   });
 
   gaxios.instance.defaults = {
-    // baseUrl: BASE_URL,
     agent: httpsAgent,
     ...(_configFieldIsValid(proxy) && { proxy: { host: proxy } })
   };
@@ -34,54 +34,57 @@ const lookUpEntity = async (entity, done) => {
   let qualifiedURL;
   let results;
 
-  const buildEnitityQuery = {
-    isIP: (entity) => BASE_URL + `(ip,like,${entity.value})~or(bgp,like,${entity.value})`,
-    isDomain: (entity) =>
-      BASE_URL + `(host,like,${entity.value})~or(domain,like,${entity.value})`,
-    isSHA256: (entity) => BASE_URL + `(hash,like,${entity.value})`,
-    isURL: (entity) => BASE_URL + `(url,like,${entity.value})`
+  const buildEntityQuery = {
+    IPv4: (entityValue) =>
+      BASE_URL + `(ip,like,${entityValue})~or(bgp,like,${entityValue})&_size=20`,
+    IPv6: (entityValue) =>
+      BASE_URL + `(ip,like,${entityValue})~or(bgp,like,${entityValue})&_size=20`,
+    domain: (entityValue) =>
+      BASE_URL + `(host,like,${entityValue})~or(domain,like,${entityValue})&_size=20`,
+    SHA256: (entityValue) => BASE_URL + `(hash,like,${entityValue})&_size=20`,
+    url: (entityValue) => BASE_URL + `(url,like,${entityValue})&_size=20`
   };
 
-  for (const entityType of Object.keys(entity)) {
-    try {
-      if (buildEnitityQuery[entityType] && entity[entityType]) {
-        qualifiedURL = buildEnitityQuery[entityType](entity);
+  try {
+    if (buildEntityQuery[entity.type]) {
+      qualifiedURL = buildEntityQuery[entity.type](entity.value);
+      Logger.trace({ IN_LOOK_UP_ENTITY: qualifiedURL });
 
-        results = await gaxios.request({
-          url: qualifiedURL
-        });
-      }
-    } catch (err) {
-      if (err || results.status !== 200) {
-        done(err || results);
-      }
+      results = await gaxios.request({
+        url: qualifiedURL
+      });
+    }
+  } catch (err) {
+    if (err || results.status !== 200) {
+      return err || results;
     }
   }
-  done(null, {
-    entity: entity,
-    data: {
-      summary: [entity.value],
-      details: results.data
-    }
-  });
+
   Logger.trace({ lookUpResults: results });
+  return {
+    entity: entity,
+    data: { summary: [`Phish Results: ${results.data.length}`], details: results.data }
+  };
 };
 
 const doLookup = async (entities, options, cb) => {
-  let lookupResults = [];
+  let lookupResults;
 
-  for (const entity of entities) {
-    try {
-      await lookUpEntity(entity, (err, result) => {
-        if (!err) {
-          lookupResults.push(result);
-        }
-      });
-    } catch (err) {
-      return cb(err, null);
-    }
+  try {
+    lookupResults = await async.parallelLimit(
+      entities.map((entity) => async () => {
+        const lookupResult = await lookUpEntity(entity);
+        return lookupResult;
+      }),
+      10
+    );
+
+    Logger.trace({ IN_LOOK_UP: lookupResults });
+  } catch (err) {
+    return cb(err, null);
   }
-  cb(null, lookupResults);
+
+  return cb(null, lookupResults);
 };
 
 module.exports = {
