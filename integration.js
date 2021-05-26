@@ -48,7 +48,6 @@ const lookUpEntity = async (entity, done) => {
   try {
     if (buildEntityQuery[entity.type]) {
       qualifiedURL = buildEntityQuery[entity.type](entity.value);
-      Logger.trace({ IN_LOOK_UP_ENTITY: qualifiedURL });
 
       results = await gaxios.request({
         url: qualifiedURL
