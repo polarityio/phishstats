@@ -24,7 +24,7 @@ module.exports = {
    */
   description:
     'Searches the urlscan.io API and returns results from the most recent, relevant scan',
-  entityTypes: ['IPv4', 'IPv6', 'IPv4CIDR', 'domain', 'url'],
+  entityTypes: ['IPv4', 'IPv6', 'IPv4CIDR', 'domain', 'url', 'SHA256'],
   onDemandOnly: false,
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
@@ -71,12 +71,5 @@ module.exports = {
   },
   logging: {
     level: 'info' //trace, debug, info, warn, error, fatal
-  },
-  /**
-   * Options that are displayed to the user/admin in the Polarity integration user-interface.  Should be structured
-   * as an array of option objects.
-   *
-   * @type Array
-   * @optional
-   */
+  }
 };
