@@ -30,6 +30,26 @@ const startup = (logger) => {
   };
 };
 
+const doLookup = async (entities, options, cb) => {
+  let lookupResults;
+
+  try {
+    lookupResults = await async.parallelLimit(
+      entities.map((entity) => async () => {
+        const lookupResult = await lookUpEntity(entity);
+        return lookupResult;
+      }),
+      10
+    );
+
+    Logger.trace({ IN_LOOK_UP: lookupResults });
+  } catch (err) {
+    return cb(err, null);
+  }
+
+  return cb(null, lookupResults);
+};
+
 const lookUpEntity = async (entity, done) => {
   let qualifiedURL;
   let results;
@@ -64,26 +84,6 @@ const lookUpEntity = async (entity, done) => {
     entity: entity,
     data: { summary: [`Phish Results: ${results.data.length}`], details: results.data }
   };
-};
-
-const doLookup = async (entities, options, cb) => {
-  let lookupResults;
-
-  try {
-    lookupResults = await async.parallelLimit(
-      entities.map((entity) => async () => {
-        const lookupResult = await lookUpEntity(entity);
-        return lookupResult;
-      }),
-      10
-    );
-
-    Logger.trace({ IN_LOOK_UP: lookupResults });
-  } catch (err) {
-    return cb(err, null);
-  }
-
-  return cb(null, lookupResults);
 };
 
 module.exports = {
