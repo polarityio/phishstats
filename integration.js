@@ -30,7 +30,7 @@ const startup = (logger) => {
   };
 };
 
-const lookUpEntity = async (entity, done) => {
+const lookupEntity = async (entity) => {
   let qualifiedURL;
   let results;
 
@@ -54,9 +54,8 @@ const lookUpEntity = async (entity, done) => {
       });
     }
   } catch (err) {
-    if (err || results.status !== 200) {
-      return err || results;
-    }
+    Logger.error(err, 'Error occurred in lookupEntity');
+    throw err;
   }
 
   Logger.trace({ lookUpResults: results });
@@ -72,7 +71,7 @@ const doLookup = async (entities, options, cb) => {
   try {
     lookupResults = await async.parallelLimit(
       entities.map((entity) => async () => {
-        const lookupResult = await lookUpEntity(entity);
+        const lookupResult = await lookupEntity(entity);
         return lookupResult;
       }),
       10
@@ -80,6 +79,7 @@ const doLookup = async (entities, options, cb) => {
 
     Logger.trace({ IN_LOOK_UP: lookupResults });
   } catch (err) {
+    Logger.error(err, 'Error occurred in doLookup');
     return cb(err, null);
   }
 
