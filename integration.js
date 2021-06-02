@@ -74,9 +74,8 @@ const lookUpEntity = async (entity, done) => {
       });
     }
   } catch (err) {
-    if (err || results.status !== 200) {
-      return err || results;
-    }
+    Logger.error(err, 'Error occurred in lookupEntity');
+    throw err;
   }
 
   res.entity = entity;
