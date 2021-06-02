@@ -1,8 +1,8 @@
 {{#each block.data.details as |details|}}
-  <div class='mb-1'>
+  <div class="mb-1">
     {{#if details}}
-      <h1 class='p-title'>
-        {{fa-icon 'map-marker-alt' fixedWidth=true}}
+      <h1 class="p-title">
+        {{fa-icon icon="map-marker-alt" fixedWidth=true}}
         IP -
         {{details.ip}}
       </h1>
@@ -10,73 +10,66 @@
 
     {{#if details.url}}
       <div>
-        <span class='p-key'>URL: </span>
-        <span class='p-value'>{{details.url}}</span>
+        <span class="p-key">URL: </span>
+        <span class="p-value">{{details.url}}</span>
       </div>
     {{/if}}
 
     {{#if details.bgp}}
       <div>
-        <span class='p-key'>BGP : </span>
-        <span class='p-value'>{{details.bgp}}</span>
+        <span class="p-key">BGP : </span>
+        <span class="p-value">{{details.bgp}}</span>
       </div>
     {{/if}}
 
     {{#if details.isp}}
       <div>
-        <span class='p-key'>ISP: </span>
-        <span class='p-value'>{{details.isp}}</span>
+        <span class="p-key">ISP: </span>
+        <span class="p-value">{{details.isp}}</span>
       </div>
     {{/if}}
 
     {{#if details.countryname}}
       <div>
-        <span class='p-key'>Country Name: </span>
-        <span class='p-value'>{{details.countryname}}</span>
+        <span class="p-key">Country: </span>
+        <span class="p-value">{{details.countryname}} ({{details.countrycode}})</span>
       </div>
     {{/if}}
 
-    {{#if details.countrycode}}
+    {{#if details.score}}
       <div>
-        <span class='p-key'>Country Code: </span>
-        <span class='p-value'>{{details.countrycode}}</span>
+        <span class="p-key">Score: </span>
+        <span class="p-value">{{details.score}}</span>
       </div>
     {{/if}}
 
     {{#if details.host}}
       <div>
-        <span class='p-key'>Host: </span>
-        <span class='p-value'>{{details.host}}</span>
+        <span class="p-key">Host: </span>
+        <span class="p-value">{{details.host}}</span>
       </div>
     {{/if}}
 
     {{#if details.domain}}
       <div>
-        <span class='p-key'>Domain: </span>
-        <span class='p-value'>{{details.domain}}</span>
+        <span class="p-key">Domain: </span>
+        <span class="p-value">{{details.domain}}</span>
       </div>
     {{/if}}
 
     {{#if details.asn}}
       <div>
-        <span class='p-key'>ASN: </span>
-        <span class='p-value'>{{details.asn}}</span>
-      </div>
-    {{/if}}
-
-    {{#if details.tld}}
-      <div>
-        <span class='p-key'>TLD: </span>
-        <span class='p-value'>{{details.tld}}</span>
+        <span class="p-key">ASN: </span>
+        <span class="p-value">{{details.asn}}</span>
       </div>
     {{/if}}
 
     {{#if details.date}}
       <div>
-        <span class='p-key'>Date: </span>
-        <span class='p-value'>{{moment-format
+        <span class="p-key">Date: </span>
+        <span class="p-value">{{moment-format
             details.date
-            'MM/DD/YYYY HH:mm:ss'
+            "MM/DD/YYYY HH:mm:ss"
             timeZone=timezone
           }}</span>
       </div>
@@ -84,21 +77,17 @@
 
     {{#if details.domain_registered_n_days_ago}}
       <div>
-        <span class='p-key'>Registration Date: </span>
-        <span class='p-value'>{{moment-format
-            details.domain_registered_n_days_ago
-            'MM/DD/YYYY HH:mm:ss'
-            timeZone=timezone
-          }}</span>
+        <span class="p-key">Registration Date: </span>
+        <span class="p-value">{{details.domain_registered_n_days_ago}}</span>
       </div>
     {{/if}}
 
     {{#if details.date_update}}
       <div>
-        <span class='p-key'> Last Updated: </span>
-        <span class='p-value'>{{moment-format
+        <span class="p-key"> Last Updated: </span>
+        <span class="p-value">{{moment-format
             details.date_update
-            'MM/DD/YYYY HH:mm:ss'
+            "MM/DD/YYYY HH:mm:ss"
             timeZone=timezone
           }}</span>
       </div>
