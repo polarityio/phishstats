@@ -5,7 +5,7 @@ module.exports = {
    * @type String
    * @required
    */
-  name: 'phishstats',
+  name: 'PhishStats',
   /**
    * The acronym that appears in the notification window when information from this integration
    * is displayed.  Note that the acronym is included as part of each "tag" in the summary information
@@ -25,7 +25,7 @@ module.exports = {
   description:
     'Searches the urlscan.io API and returns results from the most recent, relevant scan',
   entityTypes: ['IPv4', 'IPv6', 'IPv4CIDR', 'domain', 'url', 'SHA256'],
-  onDemandOnly: false,
+  onDemandOnly: true,
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
    * the below files can be used in your custom template.
