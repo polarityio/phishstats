@@ -4,19 +4,15 @@ const gaxios = require('gaxios');
 const https = require('https');
 const config = require('./config/config');
 const errorToPojo = require('./utils/errorToPojo');
-
 const URL = `https://phishstats.info:2096/api/phishing?_where=`;
 
 const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
 let Logger;
-
 const startup = (logger) => {
   Logger = logger;
-
   const {
     request: { ca, cert, key, passphrase, rejectUnauthorized, proxy }
   } = config;
-
   const httpsAgent = new https.Agent({
     ...(_configFieldIsValid(ca) && { ca: fs.readFileSync(ca) }),
     ...(_configFieldIsValid(cert) && { cert: fs.readFileSync(cert) }),
@@ -24,16 +20,13 @@ const startup = (logger) => {
     ...(_configFieldIsValid(passphrase) && { passphrase }),
     ...(typeof rejectUnauthorized === 'boolean' && { rejectUnauthorized })
   });
-
   gaxios.instance.defaults = {
     agent: httpsAgent,
     ...(_configFieldIsValid(proxy) && { proxy: { host: proxy } })
   };
 };
-
 const doLookup = async (entities, options, cb) => {
   let lookupResults;
-
   try {
     lookupResults = await async.parallelLimit(
       entities.map((entity) => async () => {
@@ -48,11 +41,9 @@ const doLookup = async (entities, options, cb) => {
   Logger.trace({ lookupResults }, 'Lookup results');
   return cb(null, lookupResults);
 };
-
 const lookUpEntity = async (entity, done) => {
   let results;
   let res = {};
-
   const buildEntityQuery = {
     IPv4: (entityValue) =>
       `(ip,like,${entityValue})~or(bgp,like,${entityValue})&_size=20`,
@@ -63,7 +54,6 @@ const lookUpEntity = async (entity, done) => {
     SHA256: (entityValue) => `(hash,like,${entityValue})&_size=20`,
     url: (entityValue) => `(url,like,${entityValue})&_size=20`
   };
-
   try {
     if (buildEntityQuery[entity.type]) {
       results = await gaxios.request({
@@ -74,18 +64,16 @@ const lookUpEntity = async (entity, done) => {
       });
     }
   } catch (err) {
-    Logger.error(err, 'Error occurred in lookupEntity');
-    throw err;
+    if (err || results.status !== 200) {
+      return err || results;
+    }
   }
-
   res.entity = entity;
   res.data = results.data
     ? { summary: [`Phish Results: ${results.data.length}`], details: results.data }
     : null;
-
   return res;
 };
-
 module.exports = {
   doLookup,
   startup
