@@ -3,8 +3,9 @@ const fs = require('fs');
 const gaxios = require('gaxios');
 const https = require('https');
 const config = require('./config/config');
+const errorToPojo = require('./utils/errorToPojo');
 
-const BASE_URL = `https://phishstats.info:2096/api/phishing?_where=`;
+const URL = `https://phishstats.info:2096/api/phishing?_where=`;
 
 const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
 let Logger;
@@ -41,36 +42,35 @@ const doLookup = async (entities, options, cb) => {
       }),
       10
     );
-
-    Logger.trace({ IN_LOOK_UP: lookupResults });
   } catch (err) {
-    return cb(err, null);
+    cb(errorToPojo(err), null);
   }
-
+  Logger.trace({ lookupResults }, 'Lookup results');
   return cb(null, lookupResults);
 };
 
 const lookUpEntity = async (entity, done) => {
-  let qualifiedURL;
   let results;
+  let res = {};
 
   const buildEntityQuery = {
     IPv4: (entityValue) =>
-      BASE_URL + `(ip,like,${entityValue})~or(bgp,like,${entityValue})&_size=20`,
+      `(ip,like,${entityValue})~or(bgp,like,${entityValue})&_size=20`,
     IPv6: (entityValue) =>
-      BASE_URL + `(ip,like,${entityValue})~or(bgp,like,${entityValue})&_size=20`,
+      `(ip,like,${entityValue})~or(bgp,like,${entityValue})&_size=20`,
     domain: (entityValue) =>
-      BASE_URL + `(host,like,${entityValue})~or(domain,like,${entityValue})&_size=20`,
-    SHA256: (entityValue) => BASE_URL + `(hash,like,${entityValue})&_size=20`,
-    url: (entityValue) => BASE_URL + `(url,like,${entityValue})&_size=20`
+      `(host,like,${entityValue})~or(domain,like,${entityValue})&_size=20`,
+    SHA256: (entityValue) => `(hash,like,${entityValue})&_size=20`,
+    url: (entityValue) => `(url,like,${entityValue})&_size=20`
   };
 
   try {
     if (buildEntityQuery[entity.type]) {
-      qualifiedURL = buildEntityQuery[entity.type](entity.value);
-
       results = await gaxios.request({
-        url: qualifiedURL
+        url: URL,
+        params: {
+          querystring: buildEntityQuery[entity.type](entity.value)
+        }
       });
     }
   } catch (err) {
@@ -79,11 +79,12 @@ const lookUpEntity = async (entity, done) => {
     }
   }
 
-  Logger.trace({ lookUpResults: results });
-  return {
-    entity: entity,
-    data: { summary: [`Phish Results: ${results.data.length}`], details: results.data }
-  };
+  res.entity = entity;
+  res.data = results.data
+    ? { summary: [`Phish Results: ${results.data.length}`], details: results.data }
+    : null;
+
+  return res;
 };
 
 module.exports = {
