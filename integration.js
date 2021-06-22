@@ -1,11 +1,11 @@
+const axios = require('axios');
 const async = require('async');
 const fs = require('fs');
-const gaxios = require('gaxios');
 const https = require('https');
 const config = require('./config/config');
 const errorToPojo = require('./utils/errorToPojo');
 
-const URL = `https://phishstats.info:2096/api/phishing?`;
+const URL = 'https://api.intsights.com/public/v2/iocs/ioc-by-value?';
 const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
 let Logger;
 
@@ -22,7 +22,8 @@ const startup = (logger) => {
     ...(_configFieldIsValid(passphrase) && { passphrase }),
     ...(typeof rejectUnauthorized === 'boolean' && { rejectUnauthorized })
   });
-  gaxios.instance.defaults = {
+
+  axios.defaults = {
     agent: httpsAgent,
     ...(_configFieldIsValid(proxy) && { proxy: { host: proxy } })
   };
@@ -34,8 +35,7 @@ const doLookup = async (entities, options, cb) => {
   try {
     lookupResults = await async.parallelLimit(
       entities.map((entity) => async () => {
-        const lookupResult = await lookUpEntity(entity, options);
-        return lookupResult;
+        return (lookupResult = await lookupIoc(entity, options));
       }),
       10
     );
@@ -52,52 +52,54 @@ const doLookup = async (entities, options, cb) => {
     return cb(errorToPojo(detailMsg, err));
   }
 
-  Logger.trace({ lookupResults }, 'Lookup results');
+  Logger.trace({ lookupResults });
   return cb(null, lookupResults);
 };
 
-const lookUpEntity = async (entity, options) => {
+const lookupIoc = async (entity, options) => {
+  Logger.trace({ options });
   let results;
-
-  const buildEntityQuery = {
-    IPv4: (entityValue) =>
-      `_where=(ip,eq,${entityValue})~or(bgp,eq,${entityValue})&_size=10`,
-    IPv6: (entityValue) =>
-      `_where=(ip,eq,${entityValue})~or(bgp,eq,${entityValue})&_size=10`,
-    domain: (entityValue) =>
-      `(host,eq,${entityValue})~or(domain,eq,${entityValue})&_size=10`,
-    hash: (entityValue) => `(hash,eq,${entityValue})&_size=10`
-  };
-
-  if (buildEntityQuery[entity.type]) {
-    results = await gaxios.request({
-      url: URL + buildEntityQuery[entity.type](entity.value),
+  try {
+    results = await axios.get(URL, {
+      auth: {
+        username: options.username,
+        password: options.password
+      },
       params: {
-        querystring: {
-          type: entity.type,
-          value: entity.value
-        }
+        iocValue: entity.value
       }
     });
-
-    return (lookupResult = {
-      entity,
-      data:
-        Array.isArray(results.data) && results.data.length > 0
-          ? { summary: getSummary(results.data), details: results.data }
-          : null
-    });
+  } catch (err) {
+    Logger.trace({ err });
   }
+  const data = results.data;
+
+  return (lookupResult = {
+    entity,
+    data:
+      Array.isArray([data]) && [data].length > 0
+        ? { summary: getSummary([data]), details: [data] }
+        : null
+  });
 };
 
 const getSummary = (data) => {
   let tags = [];
-  const totalResults = data.length;
-  tags.push(`Results: ${totalResults}`);
+  if (Array.isArray(data) && data.length > 0) {
+    const totalResults = data.length;
+    tags.push(`Results: ${totalResults}`);
+
+    if (data.Tags) {
+      data.Tags.map((tag) => {
+        tags.push(`${tag}`);
+      });
+    }
+  }
   return tags;
 };
 
 module.exports = {
   doLookup,
-  startup
+  startup,
+  lookupIoc
 };

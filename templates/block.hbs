@@ -2,95 +2,99 @@
   <div class='mb-1'>
     {{#if details}}
       <h1 class='p-title'>
-        {{fa-icon icon='map-marker-alt' fixedWidth=true}}
-        IP -
-        {{details.ip}}
+        {{fa-icon 'info' fixedWidth=true}}
+        Searched IOC -
+        {{details.Value}}
       </h1>
     {{/if}}
 
-    {{#if details.url}}
-      <div class='url'>
-        <span class='p-key'>URL: </span>
-        <span class='p-value'>{{details.url}}</span>
+    <div class='title'>
+      <span class='title'>{{fa-icon 'search' fixedWidth=true}} Detection</span>
+    </div>
+
+    {{#if details.Geolocation}}
+      <div>
+        <span class='p-key'>Geolocation : </span>
+        <span class='p-value'>{{details.Geolocation}}</span>
       </div>
     {{/if}}
 
-    {{#if details.bgp}}
+    {{#if details.Severity}}
       <div>
-        <span class='p-key'>BGP : </span>
-        <span class='p-value'>{{details.bgp}}</span>
+        <span class='p-key'>Severity: </span>
+        <span class='severity-key'>{{details.Severity}}</span>
       </div>
     {{/if}}
 
-    {{#if details.isp}}
+    {{#if details.FirstSeen}}
       <div>
-        <span class='p-key'>ISP: </span>
-        <span class='p-value'>{{details.isp}}</span>
-      </div>
-    {{/if}}
-
-    {{#if details.countryname}}
-      <div>
-        <span class='p-key'>Country: </span>
-        <span class='p-value'>{{details.countryname}} ({{details.countrycode}})</span>
-      </div>
-    {{/if}}
-
-    {{#if details.score}}
-      <div>
-        <span class='p-key'>Score: </span>
-        <span class='p-value'>{{details.score}}</span>
-      </div>
-    {{/if}}
-
-    {{#if details.host}}
-      <div>
-        <span class='p-key'>Host: </span>
-        <span class='p-value'>{{details.host}}</span>
-      </div>
-    {{/if}}
-
-    {{#if details.domain}}
-      <div>
-        <span class='p-key'>Domain: </span>
-        <span class='p-value'>{{details.domain}}</span>
-      </div>
-    {{/if}}
-
-    {{#if details.asn}}
-      <div>
-        <span class='p-key'>ASN: </span>
-        <span class='p-value'>{{details.asn}}</span>
-      </div>
-    {{/if}}
-
-    {{#if details.date}}
-      <div>
-        <span class='p-key'>Date: </span>
+        <span class='p-key'>First Seen: </span>
         <span class='p-value'>{{moment-format
-            details.date
+            details.FirstSeen
             'MM/DD/YYYY HH:mm:ss'
             timeZone=timezone
           }}</span>
       </div>
     {{/if}}
 
-    {{#if details.domain_registered_n_days_ago}}
+    {{#if details.LastSeen}}
       <div>
-        <span class='p-key'>Registration Date: </span>
-        <span class='p-value'>{{details.domain_registered_n_days_ago}}</span>
-      </div>
-    {{/if}}
-
-    {{#if details.date_update}}
-      <div>
-        <span class='p-key'> Last Updated: </span>
+        <span class='p-key'>Last Seen: </span>
         <span class='p-value'>{{moment-format
-            details.date_update
+            details.LastSeen
             'MM/DD/YYYY HH:mm:ss'
             timeZone=timezone
           }}</span>
       </div>
     {{/if}}
+
+    {{#if details.Sources}}
+      <div class='title'>
+        <span class='title'>{{fa-icon 'box' fixedWidth=true}} Sources</span>
+      </div>
+      {{#each details.Sources as |source|}}
+        {{#if source}}
+          {{#if source.ConfidenceLevel}}
+            <div class='sources-list'>
+              <span class='p-key'>Source: </span>
+              <span class='p-value'>{{source.Name}}</span>
+              <span class='p-key'>Confidence Level: </span>
+              <span class='p-value'>{{source.ConfidenceLevel}}</span>
+            </div>
+          {{/if}}
+        {{/if}}
+      {{/each}}
+    {{/if}}
+
+    {{#if details.RelatedMalware}}
+      <div class='title'>
+        <span>
+          {{fa-icon 'virus' fixedWidth=true}}
+          Related Malware</span>
+      </div>
+      {{#each details.RelatedMalware as |malware|}}
+        {{#if malware}}
+          <div>
+            <span class='p-key'>Malware: </span>
+            <span class='p-value'>{{malware}}</span>
+          </div>
+        {{/if}}
+      {{/each}}
+    {{/if}}
+
+    {{#if details.RelatedThreatActors}}
+      <div class='title'>
+        <span>{{fa-icon 'mask' fixedWidth=true}}
+          Related Threat Actors</span>
+      </div>
+      {{#each details.RelatedThreatActors as |actor|}}
+        {{#if actor}}
+          <div>
+            <span class='p-key'>Actor: </span>
+            <span class='p-value'>{{actor}}</span>
+          </div>
+        {{/if}}
+      {{/each}}
+    {{/if}} 
   </div>
 {{/each}}

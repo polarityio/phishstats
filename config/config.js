@@ -5,8 +5,8 @@ module.exports = {
    * @type String
    * @required
    */
-  name: 'PhishStats',
-  /**
+  name: 'IntSights',
+  /*
    * The acronym that appears in the notification window when information from this integration
    * is displayed.  Note that the acronym is included as part of each "tag" in the summary information
    * for the integration.  As a result, it is best to keep it to 4 or less characters.  The casing used
@@ -15,7 +15,7 @@ module.exports = {
    * @type String
    * @required
    */
-  acronym: 'PS',
+  acronym: 'IS',
   /**
    * Description for this integration which is displayed in the Polarity integrations user interface
    *
@@ -23,8 +23,8 @@ module.exports = {
    * @optional
    */
   description:
-    'Searches the urlscan.io API and returns results from the most recent, relevant scan',
-  entityTypes: ['IPv4', 'IPv6', 'IPv4CIDR', 'domain', 'url', 'SHA256'],
+    'Searches the IntSights API and returns results from the most recent, relevant scan',
+  entityTypes: ['IPv4', 'IPv6', 'domain', 'url', 'SHA256'],
   onDemandOnly: true,
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
@@ -70,6 +70,26 @@ module.exports = {
     rejectUnauthorized: true
   },
   logging: {
-    level: 'info' //trace, debug, info, warn, error, fatal
-  }
+    level: 'trace' //trace, debug, info, warn, error, fatal
+  },
+  options: [
+    {
+      key: 'username',
+      name: 'User Name',
+      description: 'Valid IntSights username',
+      default: '',
+      type: 'text',
+      userCanEdit: false,
+      adminOnly: false
+    },
+    {
+      key: 'password',
+      name: 'Password',
+      description: 'Valid IntSights Password',
+      default: '',
+      type: 'password',
+      userCanEdit: false,
+      adminOnly: false
+    }
+  ]
 };
