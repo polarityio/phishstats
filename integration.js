@@ -22,7 +22,6 @@ const startup = (logger) => {
     ...(_configFieldIsValid(passphrase) && { passphrase }),
     ...(typeof rejectUnauthorized === 'boolean' && { rejectUnauthorized })
   });
-
   gaxios.instance.defaults = {
     agent: httpsAgent,
     ...(_configFieldIsValid(proxy) && { proxy: { host: proxy } })
@@ -66,8 +65,8 @@ const lookUpEntity = async (entity, options) => {
     IPv6: (entityValue) =>
       `_where=(ip,eq,${entityValue})~or(bgp,eq,${entityValue})&_size=10`,
     domain: (entityValue) =>
-      `_where=(host,eq,${entityValue})~or(domain,eq,${entityValue})&_size=10`,
-    hash: (entityValue) => `_where=(hash,eq,${entityValue})&_size=10`
+      `(host,eq,${entityValue})~or(domain,eq,${entityValue})&_size=10`,
+    hash: (entityValue) => `(hash,eq,${entityValue})&_size=10`
   };
 
   if (buildEntityQuery[entity.type]) {
@@ -102,4 +101,3 @@ module.exports = {
   doLookup,
   startup
 };
-
