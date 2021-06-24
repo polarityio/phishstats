@@ -1,35 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@ntsmith7 
-polarityio
-/
-phishstats
-Private
-2
-00
-Code
-Issues
-Pull requests
-1
-Actions
-Projects
-Wiki
-Security
-Insights
-phishstats/config/config.js /
-@ntsmith7
-ntsmith7 phish stats config
-Latest commit dccb513 on May 21
- History
- 1 contributor
-84 lines (83 sloc)  2.83 KB
-  
 module.exports = {
   /**
    * Name of the integration which is displayed in the Polarity integrations user interface
@@ -114,16 +82,3 @@ module.exports = {
   options: [
   ]
 };
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
