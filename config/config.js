@@ -33,7 +33,7 @@ module.exports = {
    * @type Array
    * @optional
    */
-  styles: ['./styles/ps.less'],
+  styles: ['./styles/styles.less'],
   /**
    * Provide custom component logic and template for rendering the integration details block.  If you do not
    * provide a custom template and/or component then the integration will display data as a table of key value
@@ -44,10 +44,10 @@ module.exports = {
    */
   block: {
     component: {
-      file: './components/ps-block.js'
+      file: './components/block.js'
     },
     template: {
-      file: './templates/ps-block.hbs'
+      file: './templates/block.hbs'
     }
   },
   request: {
