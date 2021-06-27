@@ -5,7 +5,7 @@ The PhishStats integration searches the PhishStats API for Domains, URLs, IPs, a
 
 <img width="350" alt="Integration Example" src="./assets/phishstats.png">
 
-To learn more about PhishStats, please visit: https://PhishStats.io/about/
+To learn more about PhishStats, please visit: https://phishstats.info
 
 ## Installation Instructions
 
