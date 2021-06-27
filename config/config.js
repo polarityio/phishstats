@@ -22,9 +22,8 @@ module.exports = {
    * @type String
    * @optional
    */
-  description:
-    'Searches the urlscan.io API and returns results from the most recent, relevant scan',
-  entityTypes: ['IPv4', 'IPv6', 'IPv4CIDR', 'domain', 'url', 'sha256'],
+  description: 'Searches the PhishStats API and returns the first 10 results',
+  entityTypes: ['IPv4', 'IPv6', 'domain', 'url', 'sha256'],
   onDemandOnly: true,
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
