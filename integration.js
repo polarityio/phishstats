@@ -5,7 +5,7 @@ const https = require('https');
 const config = require('./config/config');
 const errorToPojo = require('./utils/errorToPojo');
 
-const URL = `https://phishstats.info:2096/api/phishing?`;
+const URL = `https://phishstats.info:2096/api/phishing`;
 const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
 let Logger;
 
@@ -34,7 +34,7 @@ const doLookup = async (entities, options, cb) => {
   try {
     lookupResults = await async.parallelLimit(
       entities.map((entity) => async () => {
-        const lookupResult = await lookUpEntity(entity, options);
+        const lookupResult = await lookUpEntity(entity);
         return lookupResult;
       }),
       10
@@ -43,7 +43,7 @@ const doLookup = async (entities, options, cb) => {
     let detailMsg = 'There was an unexpected error';
 
     if (err.response) {
-      detailsMsg = `Received unexpected HTTP status ${err.response.status}`;
+      detailMsg = `Received unexpected HTTP status ${err.response.status}`;
     } else if (err.request) {
       detailMsg = `There was an HTTP err`;
     } else {
@@ -56,38 +56,42 @@ const doLookup = async (entities, options, cb) => {
   return cb(null, lookupResults);
 };
 
-const lookUpEntity = async (entity, options) => {
+function buildEntityQuery(entity) {
+  switch (entity.type) {
+    case 'IPv4':
+      return `(ip,eq,${entity.value})`;
+    case 'IPv6':
+      return `(ip,eq,${entity.value})`;
+    case 'domain':
+      return `(host,eq,${entity.value})~or(domain,eq,${entity.value})`;
+    case 'hash':
+      return `(hash,eq,${entity.value})`;
+  }
+}
+
+const lookUpEntity = async (entity) => {
   let results;
 
-  const buildEntityQuery = {
-    IPv4: (entityValue) =>
-      `_where=(ip,eq,${entityValue})~or(bgp,eq,${entityValue})&_size=10`,
-    IPv6: (entityValue) =>
-      `_where=(ip,eq,${entityValue})~or(bgp,eq,${entityValue})&_size=10`,
-    domain: (entityValue) =>
-      `(host,eq,${entityValue})~or(domain,eq,${entityValue})&_size=10`,
-    hash: (entityValue) => `(hash,eq,${entityValue})&_size=10`
+  const requestOptions = {
+    url: URL,
+    params: {
+      _where: buildEntityQuery(entity),
+      _size: 10,
+      _page: 1
+    }
   };
 
-  if (buildEntityQuery[entity.type]) {
-    results = await gaxios.request({
-      url: URL + buildEntityQuery[entity.type](entity.value),
-      params: {
-        querystring: {
-          type: entity.type,
-          value: entity.value
-        }
-      }
-    });
+  Logger.debug({ requestOptions }, 'request options');
 
-    return (lookupResult = {
-      entity,
-      data:
-        Array.isArray(results.data) && results.data.length > 0
-          ? { summary: getSummary(results.data), details: results.data }
-          : null
-    });
-  }
+  results = await gaxios.request(requestOptions);
+
+  return {
+    entity,
+    data:
+      Array.isArray(results.data) && results.data.length > 0
+        ? { summary: getSummary(results.data), details: results.data }
+        : null
+  };
 };
 
 const getSummary = (data) => {
