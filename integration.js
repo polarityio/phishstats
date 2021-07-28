@@ -3,7 +3,7 @@ const fs = require('fs');
 const gaxios = require('gaxios');
 const https = require('https');
 const config = require('./config/config');
-const errorToPojo = require('./utils/errorToPojo');
+const gaxiosErrorToPojo = require('./utils/errorToPojo');
 
 const URL = `https://phishstats.info:2096/api/phishing`;
 const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
@@ -45,16 +45,7 @@ const doLookup = async (entities, options, cb) => {
       10
     );
   } catch (err) {
-    let detailMsg = 'There was an unexpected error';
-
-    if (err.response) {
-      detailMsg = `Received unexpected HTTP status ${err.response.status}`;
-    } else if (err.request) {
-      detailMsg = `There was an HTTP err`;
-    } else {
-      detailMsg = err.message;
-    }
-    return cb(errorToPojo(detailMsg, err));
+    return cb(gaxiosErrorToPojo(err));
   }
 
   Logger.trace({ lookupResults }, 'Lookup results');
