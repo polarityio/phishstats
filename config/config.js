@@ -5,7 +5,7 @@ module.exports = {
    * @type String
    * @required
    */
-  name: 'phishstats',
+  name: 'PhishStats',
   /**
    * The acronym that appears in the notification window when information from this integration
    * is displayed.  Note that the acronym is included as part of each "tag" in the summary information
@@ -22,9 +22,8 @@ module.exports = {
    * @type String
    * @optional
    */
-  description:
-    'Searches the urlscan.io API and returns results from the most recent, relevant scan',
-  entityTypes: ['IPv4', 'IPv6', 'IPv4CIDR', 'domain', 'url', 'sha256'],
+  description: 'Searches the PhishStats API and returns the first 10 results',
+  entityTypes: ['IPv4', 'IPv6', 'domain', 'url', 'sha256'],
   onDemandOnly: true,
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
@@ -33,7 +32,7 @@ module.exports = {
    * @type Array
    * @optional
    */
-  styles: ['./styles/ps.less'],
+  styles: ['./styles/styles.less'],
   /**
    * Provide custom component logic and template for rendering the integration details block.  If you do not
    * provide a custom template and/or component then the integration will display data as a table of key value
@@ -44,10 +43,10 @@ module.exports = {
    */
   block: {
     component: {
-      file: './components/ps-block.js'
+      file: './components/block.js'
     },
     template: {
-      file: './templates/ps-block.hbs'
+      file: './templates/block.hbs'
     }
   },
   request: {
@@ -79,6 +78,5 @@ module.exports = {
    * @type Array
    * @optional
    */
-  options: [
-  ]
+  options: []
 };
