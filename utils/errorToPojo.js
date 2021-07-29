@@ -11,7 +11,10 @@ function gaxiosErrorToPojo(err) {
   if (err instanceof GaxiosError) {
     let detail = 'There was an unexpected error';
     let data = '';
-    if (err.response) {
+    if (err.response && err.response.status === 503) {
+      detail = `Lookup limit reached.  Please wait a moment and try searching fewer indicators.`;
+      data = err.response.data;
+    } else if (err.response) {
       detail = `Received unexpected HTTP status ${err.response.status}`;
       data = err.response.data;
     } else if (err.request) {
