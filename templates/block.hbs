@@ -15,6 +15,13 @@
       </div>
     {{/if}}
 
+    {{#if details.title}}
+      <div>
+          <span class="p-key">Title: </span>
+          <span class="p-value">{{details.title}}</span>
+      </div>
+    {{/if}}
+
     {{#if details.bgp}}
       <div>
         <span class="p-key">BGP : </span>
@@ -40,6 +47,34 @@
       <div>
         <span class="p-key">Score: </span>
         <span class="p-value">{{details.score}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.tags}}
+      <div>
+          <span class="p-key">Tags: </span>
+          <span class="p-value">{{details.tags}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.http_server}}
+      <div>
+          <span class="p-key">HTTP Server: </span>
+          <span class="p-value">{{details.http_server}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.ports}}
+      <div>
+          <span class="p-key">Ports: </span>
+          <span class="p-value">{{details.ports}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.vulns}}
+      <div>
+          <span class="p-key">Vulnerabilities: </span>
+          <span class="p-value">{{details.vulns}}</span>
       </div>
     {{/if}}
 
@@ -77,8 +112,8 @@
 
     {{#if details.domain_registered_n_days_ago}}
       <div>
-        <span class="p-key">Registration Date: </span>
-        <span class="p-value">{{details.domain_registered_n_days_ago}}</span>
+        <span class="p-key">Domain Registered: </span>
+        <span class="p-value">{{details.domain_registered_n_days_ago}} days ago</span>
       </div>
     {{/if}}
 
