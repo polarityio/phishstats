@@ -23,7 +23,7 @@ module.exports = {
    * @optional
    */
   description: 'Searches the PhishStats API and returns the first 10 results',
-  entityTypes: ['IPv4', 'IPv6', 'domain', 'url', 'sha256'],
+  entityTypes: ['IPv4', 'IPv6', 'domain', 'url'],
   onDemandOnly: true,
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
@@ -51,16 +51,16 @@ module.exports = {
   },
   request: {
     // Provide the path to your certFile. Leave an empty string to ignore this option.
-    // Relative paths are relative to the UrlScan integration's root directory
+    // Relative paths are relative to the integration's root directory
     cert: '',
     // Provide the path to your private key. Leave an empty string to ignore this option.
-    // Relative paths are relative to the UrlScan integration's root directory
+    // Relative paths are relative to the integration's root directory
     key: '',
     // Provide the key passphrase if required.  Leave an empty string to ignore this option.
-    // Relative paths are relative to the UrlScan integration's root directory
+    // Relative paths are relative to the integration's root directory
     passphrase: '',
     // Provide the Certificate Authority. Leave an empty string to ignore this option.
-    // Relative paths are relative to the UrlScan integration's root directory
+    // Relative paths are relative to the integration's root directory
     ca: '',
     // An HTTP proxy to be used. Supports proxy Auth with Basic Auth, identical to support for
     // the url parameter (by embedding the auth info in the uri)
