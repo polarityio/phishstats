@@ -1,0 +1,131 @@
+{{#each block.data.details as |details|}}
+  <div class="mb-1">
+    {{#if details}}
+      <h1 class="p-title">
+        {{fa-icon icon="map-marker-alt" fixedWidth=true}}
+        IP -
+        {{details.ip}}
+      </h1>
+    {{/if}}
+
+    {{#if details.url}}
+      <div class="url">
+        <span class="p-key">URL: </span>
+        <span class="p-value">{{details.url}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.title}}
+      <div>
+          <span class="p-key">Title: </span>
+          <span class="p-value">{{details.title}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.bgp}}
+      <div>
+        <span class="p-key">BGP : </span>
+        <span class="p-value">{{details.bgp}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.isp}}
+      <div>
+        <span class="p-key">ISP: </span>
+        <span class="p-value">{{details.isp}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.countryname}}
+      <div>
+        <span class="p-key">Country: </span>
+        <span class="p-value">{{details.countryname}} ({{details.countrycode}})</span>
+      </div>
+    {{/if}}
+
+    {{#if details.score}}
+      <div>
+        <span class="p-key">Score: </span>
+        <span class="p-value">{{details.score}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.tags}}
+      <div>
+          <span class="p-key">Tags: </span>
+          <span class="p-value">{{details.tags}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.http_server}}
+      <div>
+          <span class="p-key">HTTP Server: </span>
+          <span class="p-value">{{details.http_server}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.ports}}
+      <div>
+          <span class="p-key">Ports: </span>
+          <span class="p-value">{{details.ports}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.vulns}}
+      <div>
+          <span class="p-key">Vulnerabilities: </span>
+          <span class="p-value">{{details.vulns}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.host}}
+      <div>
+        <span class="p-key">Host: </span>
+        <span class="p-value">{{details.host}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.domain}}
+      <div>
+        <span class="p-key">Domain: </span>
+        <span class="p-value">{{details.domain}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.asn}}
+      <div>
+        <span class="p-key">ASN: </span>
+        <span class="p-value">{{details.asn}}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.date}}
+      <div>
+        <span class="p-key">Date: </span>
+        <span class="p-value">{{moment-format
+            details.date
+            "MM/DD/YYYY HH:mm:ss"
+            timeZone=timezone
+          }}</span>
+      </div>
+    {{/if}}
+
+    {{#if details.domain_registered_n_days_ago}}
+      <div>
+        <span class="p-key">Domain Registered: </span>
+        <span class="p-value">{{details.domain_registered_n_days_ago}} days ago</span>
+      </div>
+    {{/if}}
+
+    {{#if details.date_update}}
+      <div>
+        <span class="p-key"> Last Updated: </span>
+        <span class="p-value">{{moment-format
+            details.date_update
+            "MM/DD/YYYY HH:mm:ss"
+            timeZone=timezone
+          }}</span>
+      </div>
+    {{/if}}
+  </div>
+{{/each}}
