@@ -5,6 +5,7 @@ const https = require('https');
 const config = require('./config/config');
 const gaxiosErrorToPojo = require('./utils/errorToPojo');
 
+const MAX_PARALLEL_LOOKUPS = 5;
 const URL = `https://phishstats.info:2096/api/phishing`;
 const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
 let Logger;
@@ -42,10 +43,12 @@ const doLookup = async (entities, options, cb) => {
         const lookupResult = await lookUpEntity(entity);
         return lookupResult;
       }),
-      10
+      MAX_PARALLEL_LOOKUPS
     );
   } catch (err) {
-    return cb(gaxiosErrorToPojo(err));
+    const errPojo = gaxiosErrorToPojo(err);
+    Logger.error({ err: errPojo }, 'Lookup Error');
+    return cb(errPojo);
   }
 
   Logger.trace({ lookupResults }, 'Lookup results');
@@ -85,15 +88,48 @@ const lookUpEntity = async (entity) => {
     entity,
     data:
       Array.isArray(results.data) && results.data.length > 0
-        ? { summary: getSummary(results.data), details: results.data }
+        ? { summary: getSummary(entity, results.data), details: results.data }
         : null
   };
 };
 
-const getSummary = (data) => {
+const getSummary = (entity, data) => {
   let tags = [];
+
   const totalResults = data.length;
-  tags.push(`Results: ${totalResults}`);
+  let maxScore = 0;
+  let hasVulns = false;
+  const domainsOrIps = new Set();
+
+  data.forEach((result) => {
+    if (entity.type === 'IPv4' || entity.type === 'IPv6') {
+      if (result.domain) {
+        domainsOrIps.add(result.domain);
+      }
+    } else if (entity.type === 'domain') {
+      if (result.ip) {
+        domainsOrIps.add(result.ip);
+      }
+    }
+    if (result.score > maxScore) {
+      maxScore = result.score;
+    }
+    if (result.vulns) {
+      hasVulns = true;
+    }
+  });
+
+  tags = tags.concat(Array.from(domainsOrIps.values()));
+
+  tags.push(`Max Score: ${maxScore}`);
+  if (hasVulns) {
+    tags.push(`Has Vulnerabilities`);
+  }
+
+  if (tags.length === 0) {
+    tags.push(`Results: ${totalResults}`);
+  }
+
   return tags;
 };
 
