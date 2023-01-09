@@ -1,0 +1,35 @@
+{
+  "name": "PhishStats",
+  "acronym": "PS",
+  "description": "Searches the PhishStats API and returns the first 10 results",
+  "entityTypes": [
+    "IPv4",
+    "IPv6",
+    "domain",
+    "url"
+  ],
+  "onDemandOnly": true,
+  "styles": [
+    "./styles/styles.less"
+  ],
+  "block": {
+    "component": {
+      "file": "./components/block.js"
+    },
+    "template": {
+      "file": "./templates/block.hbs"
+    }
+  },
+  "request": {
+    "cert": "",
+    "key": "",
+    "passphrase": "",
+    "ca": "",
+    "proxy": "",
+    "rejectUnauthorized": true
+  },
+  "logging": {
+    "level": "info"
+  },
+  "options": []
+}
