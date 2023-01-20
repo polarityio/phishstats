@@ -1,10 +1,10 @@
 {
-  "main": "./integration.js",
   "name": "phishstats",
-  "version": "3.1.1",
+  "version": "3.1.2",
+  "main": "./integration.js",
   "private": true,
   "dependencies": {
-    "async": "^3.2.0",
+    "async": "^3.2.4",
     "gaxios": "^4.3.0"
   }
 }
