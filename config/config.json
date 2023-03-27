@@ -1,4 +1,5 @@
 {
+  "polarityIntegrationUuid": "f384ada0-cce1-11ed-aeee-075d3490155d",
   "name": "PhishStats",
   "acronym": "PS",
   "description": "Searches the PhishStats API and returns the first 10 results",
